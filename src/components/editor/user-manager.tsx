@@ -1,19 +1,10 @@
 "use client";
 
-import { Check, Pencil, Trash2, X } from "lucide-react";
+import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
+import * as Icons from "lucide-react";
 import { useState } from "react";
 import { DiscordAvatar, DiscordBadge } from "@/components/discord";
-import type { BadgeType, DiscordUser } from "@/types/discord";
-
-const BADGE_OPTIONS: BadgeType[] = [
-  "AUTH",
-  "CODE",
-  "NITRO",
-  "BOOST",
-  "BOT",
-  "ADMIN",
-  "MOD",
-];
+import type { DiscordBadge as DiscordBadgeType, DiscordUser } from "@/types/discord";
 
 interface UserManagerProps {
   users: DiscordUser[];
@@ -28,6 +19,14 @@ export function UserManager({
 }: UserManagerProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<DiscordUser | null>(null);
+  
+  // New badge form state
+  const [showBadgeForm, setShowBadgeForm] = useState(false);
+  const [newBadge, setNewBadge] = useState<Partial<DiscordBadgeType>>({
+    label: "NEW",
+    color: "#5865f2",
+    icon: "Check",
+  });
 
   const startEdit = (user: DiscordUser) => {
     setEditingId(user.id);
@@ -37,6 +36,7 @@ export function UserManager({
   const cancelEdit = () => {
     setEditingId(null);
     setEditForm(null);
+    setShowBadgeForm(false);
   };
 
   const saveEdit = () => {
@@ -46,14 +46,30 @@ export function UserManager({
     }
   };
 
-  const toggleBadge = (badge: BadgeType) => {
+  const removeBadge = (badgeId: string) => {
     if (!editForm) return;
     setEditForm({
       ...editForm,
-      badges: editForm.badges?.includes(badge)
-        ? editForm.badges.filter((b) => b !== badge)
-        : [...(editForm.badges || []), badge],
+      badges: editForm.badges.filter((b) => b.id !== badgeId),
     });
+  };
+
+  const addBadge = () => {
+    if (!editForm || !newBadge.label) return;
+    
+    const badge: DiscordBadgeType = {
+      id: crypto.randomUUID(),
+      label: newBadge.label,
+      color: newBadge.color || "#5865f2",
+      icon: newBadge.icon,
+    };
+
+    setEditForm({
+      ...editForm,
+      badges: [...editForm.badges, badge],
+    });
+    setShowBadgeForm(false);
+    setNewBadge({ label: "NEW", color: "#5865f2", icon: "Check" });
   };
 
   return (
@@ -84,23 +100,80 @@ export function UserManager({
                   className="w-full rounded bg-[#1e1f22] border border-[#3f4147] px-2 py-1.5 text-sm text-white focus:border-[#5865f2] focus:outline-none"
                   placeholder="URL del avatar"
                 />
-                <div className="flex flex-wrap gap-1">
-                  {BADGE_OPTIONS.map((badge) => (
+                
+                {/* Badge Manager Section */}
+                <div className="space-y-2 border-t border-[#3f4147] pt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-[#b5bac1]">Badges</span>
                     <button
-                      key={badge}
                       type="button"
-                      onClick={() => toggleBadge(badge)}
-                      className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
-                        editForm.badges?.includes(badge)
-                          ? "bg-[#5865f2] text-white"
-                          : "bg-[#1e1f22] text-[#b5bac1]"
-                      }`}
+                      onClick={() => setShowBadgeForm(!showBadgeForm)}
+                      className="text-xs text-[#00a8fc] hover:underline"
                     >
-                      {badge}
+                      {showBadgeForm ? "Cancelar" : "+ Agregar Badge"}
                     </button>
-                  ))}
+                  </div>
+
+                  {showBadgeForm && (
+                    <div className="rounded bg-[#1e1f22] p-2 space-y-2 border border-[#3f4147]">
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Etiqueta"
+                          value={newBadge.label}
+                          onChange={(e) => setNewBadge({...newBadge, label: e.target.value})}
+                          className="flex-1 rounded bg-[#2b2d31] px-2 py-1 text-xs text-white border border-[#3f4147]"
+                        />
+                        <input
+                          type="color"
+                          value={newBadge.color}
+                          onChange={(e) => setNewBadge({...newBadge, color: e.target.value})}
+                          className="h-6 w-8 rounded bg-transparent cursor-pointer"
+                        />
+                      </div>
+                       <select
+                        value={newBadge.icon || ""}
+                        onChange={(e) => setNewBadge({...newBadge, icon: e.target.value})}
+                        className="w-full rounded bg-[#2b2d31] px-2 py-1 text-xs text-white border border-[#3f4147]"
+                      >
+                        <option value="">Sin icono</option>
+                        {Object.keys(Icons).map(iconName => (
+                           // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                           (Icons as any)[iconName] ? (
+                            <option key={iconName} value={iconName}>{iconName}</option>
+                           ) : null
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        onClick={addBadge}
+                        className="w-full rounded bg-[#23a559] py-1 text-xs text-white"
+                      >
+                        Agregar
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap gap-1">
+                    {editForm.badges?.map((badge) => (
+                      <div key={badge.id} className="relative group">
+                         <DiscordBadge badge={badge} />
+                         <button
+                            type="button"
+                            onClick={() => removeBadge(badge.id)}
+                            className="absolute -top-1 -right-1 hidden group-hover:block bg-[#ed4245] rounded-full p-0.5"
+                         >
+                           <X className="h-2 w-2 text-white" />
+                         </button>
+                      </div>
+                    ))}
+                    {editForm.badges.length === 0 && (
+                      <span className="text-xs text-[#949ba4] italic">Sin badges</span>
+                    )}
+                  </div>
                 </div>
-                <div className="flex gap-1">
+
+                <div className="flex gap-1 pt-2">
                   <button
                     type="button"
                     onClick={cancelEdit}
@@ -130,7 +203,7 @@ export function UserManager({
                       {user.username}
                     </span>
                     {user.badges?.map((badge) => (
-                      <DiscordBadge key={badge} type={badge} />
+                      <DiscordBadge key={badge.id} badge={badge} />
                     ))}
                   </div>
                 </div>

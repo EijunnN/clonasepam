@@ -8,6 +8,11 @@ import { DiscordMessageItem } from "./message";
 
 interface ChatProps {
   messages: DiscordMessage[];
+  chatSettings?: {
+    inputValue: string;
+    inputPlaceholder: string;
+    showInput: boolean;
+  };
   onEditMessage?: (id: string) => void;
   onDeleteMessage?: (id: string) => void;
 }
@@ -31,7 +36,10 @@ function shouldShowAvatar(
 }
 
 export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
-  function DiscordChat({ messages, onEditMessage, onDeleteMessage }, ref) {
+  function DiscordChat(
+    { messages, chatSettings, onEditMessage, onDeleteMessage },
+    ref,
+  ) {
     const sortedMessages = [...messages].sort(
       (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
     );
@@ -63,48 +71,51 @@ export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
         </div>
 
         {/* Input Area */}
-        <div className="px-4 pb-6">
-          <div className="flex items-center gap-2 rounded-lg bg-[#383a40] px-4">
-            <button
-              type="button"
-              className="flex-shrink-0 rounded-full p-1 text-[#b5bac1] hover:text-white"
-            >
-              <Plus className="h-6 w-6" />
-            </button>
-            <input
-              type="text"
-              placeholder="Mensaje @..."
-              className="min-w-0 flex-1 bg-transparent py-3 text-[#dbdee1] placeholder-[#6d6f78] outline-none"
-              disabled
-            />
-            <div className="flex items-center gap-1">
+        {chatSettings?.showInput && (
+          <div className="px-4 pb-6">
+            <div className="flex items-center gap-2 rounded-lg bg-[#383a40] px-4">
               <button
                 type="button"
-                className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                className="flex-shrink-0 rounded-full p-1 text-[#b5bac1] hover:text-white"
               >
-                <Gift className="h-5 w-5" />
+                <Plus className="h-6 w-6" />
               </button>
-              <button
-                type="button"
-                className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
-              >
-                <Sticker className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
-              >
-                <Smile className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
-              >
-                <Mic className="h-5 w-5" />
-              </button>
+              <input
+                type="text"
+                value={chatSettings.inputValue}
+                placeholder={chatSettings.inputPlaceholder}
+                className="min-w-0 flex-1 bg-transparent py-3 text-[#dbdee1] placeholder-[#6d6f78] outline-none"
+                disabled
+              />
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                >
+                  <Gift className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                >
+                  <Sticker className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                >
+                  <Smile className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                >
+                  <Mic className="h-5 w-5" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   },

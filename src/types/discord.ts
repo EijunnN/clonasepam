@@ -1,17 +1,15 @@
-export type BadgeType =
-  | "AUTH"
-  | "CODE"
-  | "NITRO"
-  | "BOOST"
-  | "BOT"
-  | "ADMIN"
-  | "MOD";
+export interface DiscordBadge {
+  id: string;
+  label: string;
+  color: string; // Background color hex
+  icon?: string; // Lucide icon name or "none"
+}
 
 export interface DiscordUser {
   id: string;
   username: string;
   avatar: string;
-  badges?: BadgeType[];
+  badges: DiscordBadge[];
   isBot?: boolean;
 }
 
@@ -43,6 +41,14 @@ export interface DiscordMessage {
   embeds?: DiscordEmbed[];
   isEdited?: boolean;
   replyTo?: string;
+}
+
+export interface DiscordChatSettings {
+  channelName: string;
+  channelIcon?: string; // TODO: Implement channel icon logic if needed
+  inputValue: string;
+  inputPlaceholder: string;
+  showInput: boolean;
 }
 
 export interface DiscordChat {

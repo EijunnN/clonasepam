@@ -85,7 +85,7 @@ export function DiscordMessageItem({
               {message.user.username}
             </span>
             {message.user.badges?.map((badge) => (
-              <DiscordBadge key={badge} type={badge} />
+              <DiscordBadge key={badge.id} badge={badge} />
             ))}
             <span className="ml-1 text-xs text-[#949ba4]">
               {formatTimestamp(message.timestamp)}

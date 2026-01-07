@@ -2,17 +2,7 @@
 
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
-import type { BadgeType, DiscordMessage, DiscordUser } from "@/types/discord";
-
-const BADGE_OPTIONS: BadgeType[] = [
-  "AUTH",
-  "CODE",
-  "NITRO",
-  "BOOST",
-  "BOT",
-  "ADMIN",
-  "MOD",
-];
+import type { DiscordMessage, DiscordUser } from "@/types/discord";
 
 interface MessageFormProps {
   message?: DiscordMessage;
@@ -99,7 +89,7 @@ export function MessageForm({
       avatar:
         newUser.avatar ||
         `https://cdn.discordapp.com/embed/avatars/${Math.floor(Math.random() * 5)}.png`,
-      badges: newUser.badges as BadgeType[],
+      badges: [],
     };
     onAddUser(user);
     setSelectedUserId(user.id);
@@ -107,14 +97,7 @@ export function MessageForm({
     setNewUser({ username: "", avatar: "", badges: [] });
   };
 
-  const toggleBadge = (badge: BadgeType) => {
-    setNewUser((prev) => ({
-      ...prev,
-      badges: prev.badges?.includes(badge)
-        ? prev.badges.filter((b) => b !== badge)
-        : [...(prev.badges || []), badge],
-    }));
-  };
+
 
   return (
     <div className="rounded-lg bg-[#1e1f22] p-4">
@@ -178,27 +161,7 @@ export function MessageForm({
               }
               className="w-full rounded-md bg-[#1e1f22] border border-[#3f4147] px-3 py-2 text-sm text-white placeholder-[#6d6f78] focus:border-[#5865f2] focus:outline-none"
             />
-            <div>
-              <label className="mb-1.5 block text-xs text-[#b5bac1]">
-                Badges
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {BADGE_OPTIONS.map((badge) => (
-                  <button
-                    key={badge}
-                    type="button"
-                    onClick={() => toggleBadge(badge)}
-                    className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                      newUser.badges?.includes(badge)
-                        ? "bg-[#5865f2] text-white"
-                        : "bg-[#1e1f22] text-[#b5bac1] hover:bg-[#35373c]"
-                    }`}
-                  >
-                    {badge}
-                  </button>
-                ))}
-              </div>
-            </div>
+            
             <button
               type="button"
               onClick={handleAddUser}
