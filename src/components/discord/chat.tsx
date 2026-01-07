@@ -45,7 +45,7 @@ export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
     );
 
     return (
-      <div ref={ref} className="flex flex-1 flex-col bg-[#313338]">
+      <div ref={ref} className="flex flex-1 flex-col bg-[#1c1d22]">
         <div className="flex-1 overflow-y-auto pb-4">
           {sortedMessages.map((message, index) => {
             const prevMessage = sortedMessages[index - 1];

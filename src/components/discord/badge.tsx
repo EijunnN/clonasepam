@@ -16,7 +16,7 @@ export function DiscordBadge({ badge }: BadgeProps) {
         "inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-medium leading-none",
       )}
       style={{
-        backgroundColor: "#303038",
+        backgroundColor: "#2a3435",
         color: "#c1c1ca"
       }}
     >

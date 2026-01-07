@@ -69,7 +69,7 @@ export default function Home() {
       const dataUrl = await toPng(chatRef.current, {
         quality: 1,
         pixelRatio: 2,
-        backgroundColor: "#313338",
+        backgroundColor: "#1c1d22",
       });
 
       const link = document.createElement("a");

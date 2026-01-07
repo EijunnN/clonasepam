@@ -24,7 +24,7 @@ export function UserManager({
   const [showBadgeForm, setShowBadgeForm] = useState(false);
   const [newBadge, setNewBadge] = useState<Partial<DiscordBadgeType>>({
     label: "APP",
-    color: "#303038",
+    color: "#2a3435",
     icon: "Check",
   });
 
@@ -60,7 +60,7 @@ export function UserManager({
     const badge: DiscordBadgeType = {
       id: crypto.randomUUID(),
       label: newBadge.label,
-      color: "#303038",
+      color: "#2a3435",
       icon: newBadge.icon,
     };
 
