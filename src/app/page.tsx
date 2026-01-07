@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Monitor, Plus, Settings, Smartphone } from "lucide-react";
+import { Download, Monitor, Pencil, Plus, Settings, Smartphone, Trash2 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { DiscordChat, DiscordHeader } from "@/components/discord";
 import { MessageForm } from "@/components/editor/message-form";

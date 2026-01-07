@@ -1,6 +1,6 @@
 "use client";
 
-import { Gift, Mic, Plus, Smile, Sticker } from "lucide-react";
+import { CirclePlus, Gift, Smile, Sticker } from "lucide-react";
 import { forwardRef } from "react";
 import type { DiscordMessage } from "@/types/discord";
 import { DateSeparator } from "./date-separator";
@@ -73,44 +73,44 @@ export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
         {/* Input Area */}
         {chatSettings?.showInput && (
           <div className="px-4 pb-6">
-            <div className="flex items-center gap-2 rounded-lg bg-[#383a40] px-4">
+            <div className="flex items-center gap-3 rounded-lg bg-[#383a40] px-4 py-2.5">
               <button
                 type="button"
-                className="flex-shrink-0 rounded-full p-1 text-[#b5bac1] hover:text-white"
+                className="flex-shrink-0 rounded-full bg-[#b5bac1] p-0.5 text-[#383a40] hover:text-white transition-colors"
               >
-                <Plus className="h-6 w-6" />
+                <CirclePlus className="h-5 w-5 fill-current" />
               </button>
               <input
                 type="text"
                 value={chatSettings.inputValue}
                 placeholder={chatSettings.inputPlaceholder}
-                className="min-w-0 flex-1 bg-transparent py-3 text-[#dbdee1] placeholder-[#6d6f78] outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[#dbdee1] placeholder-[#949ba4] outline-none text-sm font-medium"
                 disabled
               />
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                  className="text-[#b5bac1] hover:text-[#dbdee1] transition-colors"
                 >
-                  <Gift className="h-5 w-5" />
+                  <Gift className="h-6 w-6" />
                 </button>
                 <button
                   type="button"
-                  className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                  className="rounded bg-[#b5bac1] px-1.5 py-0.5 text-xs font-bold text-[#383a40] hover:text-white transition-colors"
                 >
-                  <Sticker className="h-5 w-5" />
+                  GIF
                 </button>
                 <button
                   type="button"
-                  className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                  className="text-[#b5bac1] hover:text-[#dbdee1] transition-colors"
                 >
-                  <Smile className="h-5 w-5" />
+                  <Sticker className="h-6 w-6" />
                 </button>
                 <button
                   type="button"
-                  className="rounded-full p-1.5 text-[#b5bac1] hover:text-white"
+                  className="text-[#b5bac1] hover:text-[#dbdee1] transition-colors"
                 >
-                  <Mic className="h-5 w-5" />
+                  <Smile className="h-6 w-6" />
                 </button>
               </div>
             </div>
