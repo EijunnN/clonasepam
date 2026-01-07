@@ -13,15 +13,15 @@ export function DiscordBadge({ badge }: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[10px] font-semibold",
+        "inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-medium leading-none",
       )}
       style={{
-        backgroundColor: badge.color === "#5865f2" ? "#5865f2" : badge.color, // Keep primary color if it's default blurple
-        color: "#ffffff"
+        backgroundColor: "#303038",
+        color: "#c1c1ca"
       }}
     >
-      {IconComponent && <IconComponent className="h-2.5 w-2.5" />}
-      {badge.label}
+      {IconComponent && <IconComponent className="h-[11px] w-[11px]" />}
+      <span className="mt-[0.5px]">{badge.label}</span>
     </span>
   );
 }

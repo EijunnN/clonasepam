@@ -23,8 +23,8 @@ export function UserManager({
   // New badge form state
   const [showBadgeForm, setShowBadgeForm] = useState(false);
   const [newBadge, setNewBadge] = useState<Partial<DiscordBadgeType>>({
-    label: "NEW",
-    color: "#5865f2",
+    label: "APP",
+    color: "#303038",
     icon: "Check",
   });
 
@@ -60,7 +60,7 @@ export function UserManager({
     const badge: DiscordBadgeType = {
       id: crypto.randomUUID(),
       label: newBadge.label,
-      color: newBadge.color || "#5865f2",
+      color: "#303038",
       icon: newBadge.icon,
     };
 
@@ -69,7 +69,7 @@ export function UserManager({
       badges: [...editForm.badges, badge],
     });
     setShowBadgeForm(false);
-    setNewBadge({ label: "NEW", color: "#5865f2", icon: "Check" });
+    setNewBadge({ label: "APP", color: "#303038", icon: "Check" });
   };
 
   return (
@@ -123,12 +123,6 @@ export function UserManager({
                           value={newBadge.label}
                           onChange={(e) => setNewBadge({...newBadge, label: e.target.value})}
                           className="flex-1 rounded bg-[#2b2d31] px-2 py-1 text-xs text-white border border-[#3f4147]"
-                        />
-                        <input
-                          type="color"
-                          value={newBadge.color}
-                          onChange={(e) => setNewBadge({...newBadge, color: e.target.value})}
-                          className="h-6 w-8 rounded bg-transparent cursor-pointer"
                         />
                       </div>
                        <select
