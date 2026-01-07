@@ -19,7 +19,24 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "noArrayIndexKey": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "noLabelWithoutControl": "off"
+      },
+      "performance": {
+        "noImgElement": "off"
+      },
+      "style": {
+        "useTemplate": "off"
+      },
+      "complexity": {
+        "noUselessUndefinedInitialization": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "warn"
       }
     },
     "domains": {
