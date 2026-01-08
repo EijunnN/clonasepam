@@ -1,6 +1,6 @@
 "use client";
 
-import { CirclePlus, Gift, Smile, Sticker } from "lucide-react";
+import { CirclePlus, Gift, Mic, Smile, Sticker } from "lucide-react";
 import { forwardRef } from "react";
 import type { DiscordMessage } from "@/types/discord";
 import { DateSeparator } from "./date-separator";
@@ -45,8 +45,10 @@ export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
     );
 
     return (
-      <div ref={ref} className="flex flex-1 flex-col bg-[#1c1d22]">
-        <div className="flex-1 overflow-y-auto pb-4">
+      <div ref={ref} className="flex flex-1 flex-col overflow-hidden bg-[#1c1d22]">
+        <div 
+          className="min-h-0 flex-1 overflow-y-auto pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        >
           {sortedMessages.map((message, index) => {
             const prevMessage = sortedMessages[index - 1];
             const showDateSeparator =
@@ -72,35 +74,28 @@ export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
 
         {/* Input Area */}
         {chatSettings?.showInput && (
-          <div className="px-4 pb-6">
-            <div className="flex items-center gap-3 rounded-lg bg-[#383a40] px-4 py-2.5">
-              <div className="flex items-center justify-center rounded-full bg-[#1c1d22] p-0.5">
-                <button
-                  type="button"
-                  className="flex-shrink-0 rounded-full bg-[#b5bac1] p-0.5 text-[#383a40] hover:text-white transition-colors"
-                >
-                  <CirclePlus className="h-5 w-5 fill-current" />
-                </button>
-              </div>
+          <div className="flex-shrink-0 px-4 pb-6">
+            <div className="flex items-center gap-4 rounded-lg bg-[#383a40] px-4 py-2.5">
+              <button
+                type="button"
+                className="flex-shrink-0 text-[#b5bac1] hover:text-[#dbdee1] transition-colors"
+              >
+                <CirclePlus className="h-6 w-6" />
+              </button>
+              <div className="h-6 w-px bg-[#4e5058]" />
               <input
                 type="text"
                 value={chatSettings.inputValue}
                 placeholder={chatSettings.inputPlaceholder}
-                className="min-w-0 flex-1 bg-transparent text-[#dbdee1] placeholder-[#949ba4] outline-none text-sm font-medium"
+                className="min-w-0 flex-1 bg-transparent text-[#dbdee1] placeholder-[#6d6f78] outline-none text-base"
                 disabled
               />
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <button
                   type="button"
                   className="text-[#b5bac1] hover:text-[#dbdee1] transition-colors"
                 >
                   <Gift className="h-6 w-6" />
-                </button>
-                <button
-                  type="button"
-                  className="rounded bg-[#b5bac1] px-1.5 py-0.5 text-xs font-bold text-[#383a40] hover:text-white transition-colors"
-                >
-                  GIF
                 </button>
                 <button
                   type="button"
@@ -113,6 +108,12 @@ export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
                   className="text-[#b5bac1] hover:text-[#dbdee1] transition-colors"
                 >
                   <Smile className="h-6 w-6" />
+                </button>
+                <button
+                  type="button"
+                  className="text-[#b5bac1] hover:text-[#dbdee1] transition-colors"
+                >
+                  <Mic className="h-6 w-6" />
                 </button>
               </div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
-import { useState } from "react";
+import { Plus, X, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
 import type { DiscordMessage, DiscordUser } from "@/types/discord";
 
 interface MessageFormProps {
@@ -37,7 +37,38 @@ export function MessageForm({
     message?.attachments?.[0]?.url || "",
   );
   const [embedUrl, setEmbedUrl] = useState(message?.embeds?.[0]?.url || "");
+  const [embedTitle, setEmbedTitle] = useState(message?.embeds?.[0]?.title || "");
+  const [embedAuthor, setEmbedAuthor] = useState(message?.embeds?.[0]?.author || "");
+  const [isFetchingEmbed, setIsFetchingEmbed] = useState(false);
   const [showNewUserForm, setShowNewUserForm] = useState(false);
+
+  useEffect(() => {
+    const fetchYoutubeInfo = async () => {
+      if (!embedUrl) return;
+      
+      const isYoutube = embedUrl.includes("youtube.com") || embedUrl.includes("youtu.be");
+      if (!isYoutube) return;
+
+      setIsFetchingEmbed(true);
+      try {
+        const response = await fetch(
+          `https://www.youtube.com/oembed?url=${encodeURIComponent(embedUrl)}&format=json`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          if (!embedTitle) setEmbedTitle(data.title || "");
+          if (!embedAuthor) setEmbedAuthor(data.author_name || "");
+        }
+      } catch (error) {
+        console.error("Error fetching YouTube info:", error);
+      } finally {
+        setIsFetchingEmbed(false);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchYoutubeInfo, 500);
+    return () => clearTimeout(timeoutId);
+  }, [embedUrl]);
   const [newUser, setNewUser] = useState<Partial<DiscordUser>>({
     username: "",
     avatar: "",
@@ -62,7 +93,8 @@ export function MessageForm({
         {
           type: isYoutube ? ("youtube" as const) : ("link" as const),
           url: embedUrl,
-          title: isYoutube ? "YouTube Video" : "Link",
+          title: embedTitle || (isYoutube ? "YouTube Video" : "Link"),
+          author: embedAuthor || undefined,
           siteName: isYoutube ? "YouTube" : undefined,
           thumbnail: isYoutube
             ? `https://img.youtube.com/vi/${extractYoutubeId(embedUrl)}/maxresdefault.jpg`
@@ -221,6 +253,41 @@ export function MessageForm({
             className="w-full rounded-md bg-[#1e1f22] border border-[#3f4147] px-3 py-2 text-sm text-white placeholder-[#6d6f78] focus:border-[#5865f2] focus:outline-none"
           />
         </div>
+
+        {embedUrl && (
+          <>
+            {isFetchingEmbed && (
+              <div className="flex items-center gap-2 text-xs text-[#b5bac1]">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                Obteniendo información del video...
+              </div>
+            )}
+            <div>
+              <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-[#b5bac1]">
+                Título del video
+              </label>
+              <input
+                type="text"
+                value={embedTitle}
+                onChange={(e) => setEmbedTitle(e.target.value)}
+                placeholder="Título del video..."
+                className="w-full rounded-md bg-[#1e1f22] border border-[#3f4147] px-3 py-2 text-sm text-white placeholder-[#6d6f78] focus:border-[#5865f2] focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-[#b5bac1]">
+                Canal / Autor
+              </label>
+              <input
+                type="text"
+                value={embedAuthor}
+                onChange={(e) => setEmbedAuthor(e.target.value)}
+                placeholder="Nombre del canal..."
+                className="w-full rounded-md bg-[#1e1f22] border border-[#3f4147] px-3 py-2 text-sm text-white placeholder-[#6d6f78] focus:border-[#5865f2] focus:outline-none"
+              />
+            </div>
+          </>
+        )}
 
         <div className="flex gap-2 pt-2">
           <button
