@@ -25,7 +25,7 @@ const PLATFORMS: Platform[] = [
   { id: "telegram", name: "Telegram", icon: "✈️", color: "#0088cc", available: false },
   { id: "tiktok", name: "TikTok", icon: "🎵", color: "#000000", available: false },
   { id: "tinder", name: "Tinder", icon: "🔥", color: "#fe3c72", available: false },
-  { id: "whatsapp", name: "WhatsApp", icon: "📱", color: "#25d366", available: false },
+  { id: "whatsapp", name: "WhatsApp", icon: "📱", color: "#25d366", available: true },
   { id: "x", name: "X", icon: "𝕏", color: "#000000", available: false },
 ];
 
