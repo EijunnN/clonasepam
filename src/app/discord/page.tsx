@@ -267,6 +267,7 @@ export default function DiscordPage() {
         {/* Right Panel - Preview */}
         <div className="flex flex-1 items-center justify-center bg-[#1e1f22] p-8">
           <div
+            ref={chatRef}
             className={`flex flex-col overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/20 ${
               viewMode === "mobile" ? "w-[375px]" : "w-full max-w-3xl"
             }`}
@@ -281,7 +282,6 @@ export default function DiscordPage() {
               isOnline={true}
             />
             <DiscordChat
-              ref={chatRef}
               messages={messages}
               chatSettings={settings}
               onEditMessage={handleEditMessage}

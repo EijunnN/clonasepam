@@ -1,7 +1,6 @@
 "use client";
 
 import { CirclePlus, Gift, Mic, Smile, Sticker } from "lucide-react";
-import { forwardRef } from "react";
 import type { DiscordMessage } from "@/types/discord";
 import { DateSeparator } from "./date-separator";
 import { DiscordMessageItem } from "./message";
@@ -35,17 +34,18 @@ function shouldShowAvatar(
   return false;
 }
 
-export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
-  function DiscordChat(
-    { messages, chatSettings, onEditMessage, onDeleteMessage },
-    ref,
-  ) {
-    const sortedMessages = [...messages].sort(
-      (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
-    );
+export function DiscordChat({
+  messages,
+  chatSettings,
+  onEditMessage,
+  onDeleteMessage,
+}: ChatProps) {
+  const sortedMessages = [...messages].sort(
+    (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
+  );
 
-    return (
-      <div ref={ref} className="flex flex-1 flex-col overflow-hidden bg-[#1c1d22]">
+  return (
+    <div className="flex flex-1 flex-col overflow-hidden bg-[#1c1d22]">
         <div 
           className="min-h-0 flex-1 overflow-y-auto pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
@@ -120,6 +120,5 @@ export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
           </div>
         )}
       </div>
-    );
-  },
-);
+  );
+}
