@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Pencil, Trash2, X } from "lucide-react";
+import { Check, ChevronDown, Pencil, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { DiscordAvatar, DiscordBadge } from "@/components/discord";
 import { BadgeIcons } from "@/components/discord/badge-icons";
@@ -25,6 +25,7 @@ export function UserManager({
 
   // New badge form state
   const [showBadgeForm, setShowBadgeForm] = useState(false);
+  const [isIconDropdownOpen, setIsIconDropdownOpen] = useState(false);
   const [newBadge, setNewBadge] = useState<Partial<DiscordBadgeType>>({
     label: "APP",
     color: "#2a3435",
@@ -132,19 +133,64 @@ export function UserManager({
                           className="flex-1 rounded bg-[#2b2d31] px-2 py-1 text-xs text-white border border-[#3f4147]"
                         />
                       </div>
-                      <select
-                        value={newBadge.icon || ""}
-                        onChange={(e) =>
-                          setNewBadge({ ...newBadge, icon: e.target.value })
-                        }
-                        className="w-full rounded bg-[#2b2d31] px-2 py-1 text-xs text-white border border-[#3f4147]"
-                      >
-                        {Object.keys(BadgeIcons).map((iconName) => (
-                          <option key={iconName} value={iconName}>
-                            {iconName}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setIsIconDropdownOpen(!isIconDropdownOpen)
+                          }
+                          className="flex w-full items-center justify-between rounded bg-[#2b2d31] px-2 py-1.5 text-xs text-white border border-[#3f4147] hover:border-[#5865f2] transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            {newBadge.icon &&
+                            BadgeIcons[
+                              newBadge.icon as keyof typeof BadgeIcons
+                            ] ? (
+                              <>
+                                {(() => {
+                                  const Icon =
+                                    BadgeIcons[
+                                      newBadge.icon as keyof typeof BadgeIcons
+                                    ];
+                                  return <Icon className="h-4 w-4" />;
+                                })()}
+                                <span>{newBadge.icon}</span>
+                              </>
+                            ) : (
+                              <span className="text-[#949ba4]">
+                                Seleccionar icono
+                              </span>
+                            )}
+                          </div>
+                          <ChevronDown className="h-3 w-3 text-[#b5bac1]" />
+                        </button>
+
+                        {isIconDropdownOpen && (
+                          <div className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-md border border-[#1e1f22] bg-[#2b2d31] shadow-xl">
+                            {Object.keys(BadgeIcons).map((iconName) => {
+                              const Icon =
+                                BadgeIcons[iconName as keyof typeof BadgeIcons];
+                              return (
+                                <button
+                                  key={iconName}
+                                  type="button"
+                                  onClick={() => {
+                                    setNewBadge({
+                                      ...newBadge,
+                                      icon: iconName,
+                                    });
+                                    setIsIconDropdownOpen(false);
+                                  }}
+                                  className="flex w-full items-center gap-2 px-2 py-1.5 text-xs text-white hover:bg-[#35373c] transition-colors text-left"
+                                >
+                                  <Icon className="h-4 w-4" />
+                                  <span>{iconName}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
                       <button
                         type="button"
                         onClick={addBadge}
