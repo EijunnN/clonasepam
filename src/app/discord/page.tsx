@@ -185,6 +185,7 @@ export default function DiscordPage() {
                   users={users}
                   onUpdateUser={updateUser}
                   onDeleteUser={deleteUser}
+                  onAddUser={addUser}
                 />
               </div>
             ) : (
@@ -278,8 +279,8 @@ export default function DiscordPage() {
             <DiscordHeader
               name={chatName}
               avatar={chatAvatar}
-              status="Compartiendo su..."
-              isOnline={true}
+              status={settings.headerStatus || undefined}
+              isOnline={settings.headerIsOnline}
             />
             <DiscordChat
               messages={messages}

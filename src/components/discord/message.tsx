@@ -67,7 +67,7 @@ export function DiscordMessageItem({
   onDelete,
 }: MessageProps) {
   return (
-    <div className="group relative flex gap-4 px-4 py-0.5 hover:bg-[#2e3035]">
+    <div className="group relative flex gap-4 px-4 py-0.5 hover:bg-[#2e3035 mb-3">
       {showAvatar ? (
         <div className="mt-1 flex-shrink-0">
           <DiscordAvatar

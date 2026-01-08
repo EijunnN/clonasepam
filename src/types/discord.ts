@@ -46,7 +46,9 @@ export interface DiscordMessage {
 
 export interface DiscordChatSettings {
   channelName: string;
-  channelIcon?: string; // TODO: Implement channel icon logic if needed
+  channelIcon?: string;
+  headerStatus: string;
+  headerIsOnline: boolean;
   inputValue: string;
   inputPlaceholder: string;
   showInput: boolean;

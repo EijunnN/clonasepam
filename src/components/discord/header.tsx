@@ -1,4 +1,4 @@
-import { ChevronLeft, Phone, Search, Video } from "lucide-react";
+import { ChevronLeft, ChevronRight, Phone, Search, Video } from "lucide-react";
 import { DiscordAvatar } from "./avatar";
 
 interface HeaderProps {
@@ -35,7 +35,7 @@ export function DiscordHeader({ name, avatar, status, isOnline }: HeaderProps) {
         <div className="ml-1">
           <div className="flex items-center gap-1">
             <h1 className="font-semibold text-white">{name}</h1>
-            <ChevronLeft className="h-4 w-4 rotate-[-90deg] text-[#b5bac1]" />
+            <ChevronRight className="h-4 w-4  text-[#b5bac1]" />
           </div>
           {status && (
             <p className="flex items-center gap-1 text-xs text-[#23a559]">

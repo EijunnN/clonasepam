@@ -54,6 +54,8 @@ const DEFAULT_MESSAGES: DiscordMessage[] = [
 
 const DEFAULT_SETTINGS: DiscordChatSettings = {
   channelName: "general",
+  headerStatus: "",
+  headerIsOnline: true,
   inputValue: "",
   inputPlaceholder: "Mensaje @chat",
   showInput: true,

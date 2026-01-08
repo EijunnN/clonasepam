@@ -1,12 +1,13 @@
 "use client";
 
-import { Check, ChevronDown, Pencil, Trash2, X } from "lucide-react";
+import { Check, ChevronDown, Loader2, Pencil, Plus, Search, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { DiscordAvatar, DiscordBadge } from "@/components/discord";
 import {
   type BadgeIconName,
   BadgeIcons,
 } from "@/components/discord/badge-icons";
+import { lookupDiscordUser } from "@/lib/discord-api";
 import { BADGE_PALETTES, type BadgePaletteName } from "@/lib/badge-palettes";
 import { cn } from "@/lib/utils";
 import type {
@@ -18,15 +19,23 @@ interface UserManagerProps {
   users: DiscordUser[];
   onUpdateUser: (user: DiscordUser) => void;
   onDeleteUser: (id: string) => void;
+  onAddUser?: (user: DiscordUser) => void;
 }
 
 export function UserManager({
   users,
   onUpdateUser,
   onDeleteUser,
+  onAddUser,
 }: UserManagerProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<DiscordUser | null>(null);
+
+  // Import by Discord ID state
+  const [showImportForm, setShowImportForm] = useState(false);
+  const [discordIdInput, setDiscordIdInput] = useState("");
+  const [isImporting, setIsImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
 
   // New badge form state
   const [showBadgeForm, setShowBadgeForm] = useState(false);
@@ -37,6 +46,37 @@ export function UserManager({
     icon: "Espada",
     iconPalette: "default",
   });
+
+  const handleImportUser = async () => {
+    if (!discordIdInput.trim() || !onAddUser) return;
+    
+    setIsImporting(true);
+    setImportError(null);
+    
+    try {
+      const userData = await lookupDiscordUser(discordIdInput.trim());
+      
+      if (!userData) {
+        setImportError("No se pudo encontrar el usuario. Verifica el ID.");
+        return;
+      }
+      
+      const newUser: DiscordUser = {
+        id: discordIdInput.trim(),
+        username: userData.displayName || userData.username,
+        avatar: userData.avatar,
+        badges: [],
+      };
+      
+      onAddUser(newUser);
+      setDiscordIdInput("");
+      setShowImportForm(false);
+    } catch (error) {
+      setImportError("Error al buscar usuario");
+    } finally {
+      setIsImporting(false);
+    }
+  };
 
   const startEdit = (user: DiscordUser) => {
     setEditingId(user.id);
@@ -94,9 +134,57 @@ export function UserManager({
 
   return (
     <div className="rounded-lg bg-[#1e1f22] p-3">
-      <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#b5bac1]">
-        Usuarios ({users.length})
-      </h3>
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-[#b5bac1]">
+          Usuarios ({users.length})
+        </h3>
+        {onAddUser && (
+          <button
+            type="button"
+            onClick={() => setShowImportForm(!showImportForm)}
+            className="flex items-center gap-1 text-xs text-[#00a8fc] hover:underline"
+          >
+            <Search className="h-3 w-3" />
+            Importar por ID
+          </button>
+        )}
+      </div>
+
+      {showImportForm && onAddUser && (
+        <div className="mb-3 rounded-md border border-[#3f4147] bg-[#2b2d31] p-3 space-y-2">
+          <p className="text-xs text-[#b5bac1]">
+            Ingresa el ID de Discord del usuario para importar su avatar y nombre
+          </p>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Ej: 123456789012345678"
+              value={discordIdInput}
+              onChange={(e) => setDiscordIdInput(e.target.value)}
+              className="flex-1 rounded bg-[#1e1f22] px-2 py-1.5 text-sm text-white border border-[#3f4147] placeholder-[#6d6f78] focus:border-[#5865f2] focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={handleImportUser}
+              disabled={isImporting || !discordIdInput.trim()}
+              className="rounded bg-[#5865f2] px-3 py-1.5 text-sm text-white hover:bg-[#4752c4] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+            >
+              {isImporting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}
+            </button>
+          </div>
+          {importError && (
+            <p className="text-xs text-red-400">{importError}</p>
+          )}
+          <p className="text-[10px] text-[#6d6f78]">
+            Tip: Para obtener un ID, activa el modo desarrollador en Discord y haz clic derecho en un usuario
+          </p>
+        </div>
+      )}
+
       <div className="space-y-2">
         {users.map((user) => (
           <div key={user.id} className="rounded-md bg-[#2b2d31] p-2">

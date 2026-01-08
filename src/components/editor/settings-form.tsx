@@ -16,7 +16,7 @@ export function SettingsForm({ settings, onUpdate }: SettingsFormProps) {
       <div className="space-y-4">
         <div>
           <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-[#b5bac1]">
-            Nombre del canal
+            Nombre
           </label>
           <input
             type="text"
@@ -25,6 +25,31 @@ export function SettingsForm({ settings, onUpdate }: SettingsFormProps) {
             className="w-full rounded-md bg-[#1e1f22] border border-[#3f4147] px-3 py-2 text-sm text-white focus:border-[#5865f2] focus:outline-none"
             placeholder="general"
           />
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-[#b5bac1]">
+            Status del header
+          </label>
+          <input
+            type="text"
+            value={settings.headerStatus}
+            onChange={(e) => onUpdate({ headerStatus: e.target.value })}
+            className="w-full rounded-md bg-[#1e1f22] border border-[#3f4147] px-3 py-2 text-sm text-white focus:border-[#5865f2] focus:outline-none"
+            placeholder="Jugando a..."
+          />
+        </div>
+
+        <div>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={settings.headerIsOnline}
+              onChange={(e) => onUpdate({ headerIsOnline: e.target.checked })}
+              className="h-4 w-4 rounded border-gray-600 bg-[#1e1f22] text-[#5865f2] focus:ring-[#5865f2]"
+            />
+            <span className="text-sm text-white">Usuario en línea</span>
+          </label>
         </div>
 
         <div>
