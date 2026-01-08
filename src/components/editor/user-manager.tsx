@@ -1,10 +1,13 @@
 "use client";
 
-import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
-import * as Icons from "lucide-react";
+import { Check, Pencil, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { DiscordAvatar, DiscordBadge } from "@/components/discord";
-import type { DiscordBadge as DiscordBadgeType, DiscordUser } from "@/types/discord";
+import { BadgeIcons } from "@/components/discord/badge-icons";
+import type {
+  DiscordBadge as DiscordBadgeType,
+  DiscordUser,
+} from "@/types/discord";
 
 interface UserManagerProps {
   users: DiscordUser[];
@@ -19,13 +22,13 @@ export function UserManager({
 }: UserManagerProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<DiscordUser | null>(null);
-  
+
   // New badge form state
   const [showBadgeForm, setShowBadgeForm] = useState(false);
   const [newBadge, setNewBadge] = useState<Partial<DiscordBadgeType>>({
     label: "APP",
     color: "#2a3435",
-    icon: "Check",
+    icon: "Espada",
   });
 
   const startEdit = (user: DiscordUser) => {
@@ -56,7 +59,7 @@ export function UserManager({
 
   const addBadge = () => {
     if (!editForm || !newBadge.label) return;
-    
+
     const badge: DiscordBadgeType = {
       id: crypto.randomUUID(),
       label: newBadge.label,
@@ -69,7 +72,7 @@ export function UserManager({
       badges: [...editForm.badges, badge],
     });
     setShowBadgeForm(false);
-    setNewBadge({ label: "APP", color: "#303038", icon: "Check" });
+    setNewBadge({ label: "APP", color: "#2a3435", icon: "Espada" });
   };
 
   return (
@@ -100,11 +103,13 @@ export function UserManager({
                   className="w-full rounded bg-[#1e1f22] border border-[#3f4147] px-2 py-1.5 text-sm text-white focus:border-[#5865f2] focus:outline-none"
                   placeholder="URL del avatar"
                 />
-                
+
                 {/* Badge Manager Section */}
                 <div className="space-y-2 border-t border-[#3f4147] pt-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-[#b5bac1]">Badges</span>
+                    <span className="text-xs font-medium text-[#b5bac1]">
+                      Badges
+                    </span>
                     <button
                       type="button"
                       onClick={() => setShowBadgeForm(!showBadgeForm)}
@@ -121,21 +126,23 @@ export function UserManager({
                           type="text"
                           placeholder="Etiqueta"
                           value={newBadge.label}
-                          onChange={(e) => setNewBadge({...newBadge, label: e.target.value})}
+                          onChange={(e) =>
+                            setNewBadge({ ...newBadge, label: e.target.value })
+                          }
                           className="flex-1 rounded bg-[#2b2d31] px-2 py-1 text-xs text-white border border-[#3f4147]"
                         />
                       </div>
-                       <select
+                      <select
                         value={newBadge.icon || ""}
-                        onChange={(e) => setNewBadge({...newBadge, icon: e.target.value})}
+                        onChange={(e) =>
+                          setNewBadge({ ...newBadge, icon: e.target.value })
+                        }
                         className="w-full rounded bg-[#2b2d31] px-2 py-1 text-xs text-white border border-[#3f4147]"
                       >
-                        <option value="">Sin icono</option>
-                        {Object.keys(Icons).map(iconName => (
-                           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                           (Icons as any)[iconName] ? (
-                            <option key={iconName} value={iconName}>{iconName}</option>
-                           ) : null
+                        {Object.keys(BadgeIcons).map((iconName) => (
+                          <option key={iconName} value={iconName}>
+                            {iconName}
+                          </option>
                         ))}
                       </select>
                       <button
@@ -151,18 +158,20 @@ export function UserManager({
                   <div className="flex flex-wrap gap-1">
                     {editForm.badges?.map((badge) => (
                       <div key={badge.id} className="relative group">
-                         <DiscordBadge badge={badge} />
-                         <button
-                            type="button"
-                            onClick={() => removeBadge(badge.id)}
-                            className="absolute -top-1 -right-1 hidden group-hover:block bg-[#ed4245] rounded-full p-0.5"
-                         >
-                           <X className="h-2 w-2 text-white" />
-                         </button>
+                        <DiscordBadge badge={badge} />
+                        <button
+                          type="button"
+                          onClick={() => removeBadge(badge.id)}
+                          className="absolute -top-1 -right-1 hidden group-hover:block bg-[#ed4245] rounded-full p-0.5"
+                        >
+                          <X className="h-2 w-2 text-white" />
+                        </button>
                       </div>
                     ))}
                     {editForm.badges.length === 0 && (
-                      <span className="text-xs text-[#949ba4] italic">Sin badges</span>
+                      <span className="text-xs text-[#949ba4] italic">
+                        Sin badges
+                      </span>
                     )}
                   </div>
                 </div>

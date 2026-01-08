@@ -97,8 +97,6 @@ export function MessageForm({
     setNewUser({ username: "", avatar: "", badges: [] });
   };
 
-
-
   return (
     <div className="rounded-lg bg-[#1e1f22] p-4">
       <div className="mb-4 flex items-center justify-between">
@@ -161,7 +159,7 @@ export function MessageForm({
               }
               className="w-full rounded-md bg-[#1e1f22] border border-[#3f4147] px-3 py-2 text-sm text-white placeholder-[#6d6f78] focus:border-[#5865f2] focus:outline-none"
             />
-            
+
             <button
               type="button"
               onClick={handleAddUser}

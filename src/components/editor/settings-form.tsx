@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import type { DiscordChatSettings } from "@/types/discord";
 
 interface SettingsFormProps {

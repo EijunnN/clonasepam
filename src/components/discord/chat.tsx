@@ -74,12 +74,14 @@ export const DiscordChat = forwardRef<HTMLDivElement, ChatProps>(
         {chatSettings?.showInput && (
           <div className="px-4 pb-6">
             <div className="flex items-center gap-3 rounded-lg bg-[#383a40] px-4 py-2.5">
-              <button
-                type="button"
-                className="flex-shrink-0 rounded-full bg-[#b5bac1] p-0.5 text-[#383a40] hover:text-white transition-colors"
-              >
-                <CirclePlus className="h-5 w-5 fill-current" />
-              </button>
+              <div className="flex items-center justify-center rounded-full bg-[#1c1d22] p-0.5">
+                <button
+                  type="button"
+                  className="flex-shrink-0 rounded-full bg-[#b5bac1] p-0.5 text-[#383a40] hover:text-white transition-colors"
+                >
+                  <CirclePlus className="h-5 w-5 fill-current" />
+                </button>
+              </div>
               <input
                 type="text"
                 value={chatSettings.inputValue}

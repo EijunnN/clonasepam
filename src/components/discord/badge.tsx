@@ -1,14 +1,27 @@
-import * as Icons from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import type { ComponentType } from "react";
 import { cn } from "@/lib/utils";
 import type { DiscordBadge as DiscordBadgeType } from "@/types/discord";
+import { type BadgeIconName, BadgeIcons } from "./badge-icons";
 
 interface BadgeProps {
   badge: DiscordBadgeType;
 }
 
 export function DiscordBadge({ badge }: BadgeProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const IconComponent = (Icons as any)[badge.icon || ""] || null;
+  // Check if it's a custom badge icon
+  const CustomIcon = BadgeIcons[badge.icon as BadgeIconName];
+
+  // Fallback to Lucide icons if not found in custom set (for backward compatibility)
+  const IconComponent =
+    CustomIcon ||
+    (
+      LucideIcons as unknown as Record<
+        string,
+        ComponentType<{ className?: string }>
+      >
+    )[badge.icon || ""] ||
+    null;
 
   return (
     <span
@@ -17,7 +30,7 @@ export function DiscordBadge({ badge }: BadgeProps) {
       )}
       style={{
         backgroundColor: "#2a3435",
-        color: "#c1c1ca"
+        color: "#c1c1ca",
       }}
     >
       {IconComponent && <IconComponent className="h-[11px] w-[11px]" />}

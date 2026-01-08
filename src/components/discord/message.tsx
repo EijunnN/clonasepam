@@ -29,11 +29,13 @@ function formatTimestamp(date: Date): string {
   if (isYesterday) {
     return `ayer a las ${time}`;
   }
-  return date.toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }) + ` ${time}`;
+  return (
+    date.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }) + ` ${time}`
+  );
 }
 
 function parseContent(content: string): React.ReactNode[] {

@@ -15,9 +15,9 @@ const DEFAULT_USERS: DiscordUser[] = [
     badges: [
       {
         id: "1",
-        label: "CODE",
-        color: "#23a559",
-        icon: "Zap",
+        label: "APP",
+        color: "#2a3435",
+        icon: "Rayo",
       },
     ],
   },
@@ -28,9 +28,9 @@ const DEFAULT_USERS: DiscordUser[] = [
     badges: [
       {
         id: "2",
-        label: "AUTH",
-        color: "#5865f2",
-        icon: "Check",
+        label: "MOD",
+        color: "#2a3435",
+        icon: "Espada",
       },
     ],
   },
@@ -90,9 +90,7 @@ export function useDiscordChat() {
   };
 
   const updateMessage = (message: DiscordMessage) => {
-    setMessages((prev) =>
-      prev.map((m) => (m.id === message.id ? message : m)),
-    );
+    setMessages((prev) => prev.map((m) => (m.id === message.id ? message : m)));
   };
 
   const deleteMessage = (id: string) => {
