@@ -3,6 +3,7 @@ export interface DiscordBadge {
   label: string;
   color: string; // Background color hex
   icon?: string; // Lucide icon name or "none"
+  iconPalette?: string; // Key from BADGE_PALETTES
 }
 
 export interface DiscordUser {

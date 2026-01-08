@@ -1,5 +1,6 @@
 import * as LucideIcons from "lucide-react";
 import type { ComponentType } from "react";
+import { BADGE_PALETTES, type BadgePaletteName } from "@/lib/badge-palettes";
 import { cn } from "@/lib/utils";
 import type { DiscordBadge as DiscordBadgeType } from "@/types/discord";
 import { type BadgeIconName, BadgeIcons } from "./badge-icons";
@@ -23,6 +24,10 @@ export function DiscordBadge({ badge }: BadgeProps) {
     )[badge.icon || ""] ||
     null;
 
+  const palette = badge.iconPalette
+    ? BADGE_PALETTES[badge.iconPalette as BadgePaletteName]?.colors
+    : null;
+
   return (
     <span
       className={cn(
@@ -33,7 +38,11 @@ export function DiscordBadge({ badge }: BadgeProps) {
         color: "#c1c1ca",
       }}
     >
-      {IconComponent && <IconComponent className="h-[11px] w-[11px]" />}
+      {CustomIcon ? (
+        <CustomIcon className="h-[11px] w-[11px]" palette={palette} />
+      ) : IconComponent ? (
+        <IconComponent className="h-[11px] w-[11px]" />
+      ) : null}
       <span className="mt-[0.5px]">{badge.label}</span>
     </span>
   );

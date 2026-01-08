@@ -3,7 +3,12 @@
 import { Check, ChevronDown, Pencil, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { DiscordAvatar, DiscordBadge } from "@/components/discord";
-import { BadgeIcons } from "@/components/discord/badge-icons";
+import {
+  type BadgeIconName,
+  BadgeIcons,
+} from "@/components/discord/badge-icons";
+import { BADGE_PALETTES, type BadgePaletteName } from "@/lib/badge-palettes";
+import { cn } from "@/lib/utils";
 import type {
   DiscordBadge as DiscordBadgeType,
   DiscordUser,
@@ -30,6 +35,7 @@ export function UserManager({
     label: "APP",
     color: "#2a3435",
     icon: "Espada",
+    iconPalette: "default",
   });
 
   const startEdit = (user: DiscordUser) => {
@@ -66,6 +72,7 @@ export function UserManager({
       label: newBadge.label,
       color: "#2a3435",
       icon: newBadge.icon,
+      iconPalette: newBadge.iconPalette,
     };
 
     setEditForm({
@@ -73,8 +80,17 @@ export function UserManager({
       badges: [...editForm.badges, badge],
     });
     setShowBadgeForm(false);
-    setNewBadge({ label: "APP", color: "#2a3435", icon: "Espada" });
+    setNewBadge({
+      label: "APP",
+      color: "#2a3435",
+      icon: "Espada",
+      iconPalette: "default",
+    });
   };
+
+  const SelectedIcon =
+    BadgeIcons[(newBadge.icon as BadgeIconName) || "Espada"] ||
+    BadgeIcons.Espada;
 
   return (
     <div className="rounded-lg bg-[#1e1f22] p-3">
@@ -147,13 +163,15 @@ export function UserManager({
                               newBadge.icon as keyof typeof BadgeIcons
                             ] ? (
                               <>
-                                {(() => {
-                                  const Icon =
-                                    BadgeIcons[
-                                      newBadge.icon as keyof typeof BadgeIcons
-                                    ];
-                                  return <Icon className="h-4 w-4" />;
-                                })()}
+                                <SelectedIcon
+                                  className="h-4 w-4"
+                                  palette={
+                                    BADGE_PALETTES[
+                                      (newBadge.iconPalette as BadgePaletteName) ||
+                                        "default"
+                                    ]?.colors
+                                  }
+                                />
                                 <span>{newBadge.icon}</span>
                               </>
                             ) : (
@@ -183,7 +201,15 @@ export function UserManager({
                                   }}
                                   className="flex w-full items-center gap-2 px-2 py-1.5 text-xs text-white hover:bg-[#35373c] transition-colors text-left"
                                 >
-                                  <Icon className="h-4 w-4" />
+                                  <Icon
+                                    className="h-4 w-4"
+                                    palette={
+                                      BADGE_PALETTES[
+                                        (newBadge.iconPalette as BadgePaletteName) ||
+                                          "default"
+                                      ]?.colors
+                                    }
+                                  />
                                   <span>{iconName}</span>
                                 </button>
                               );
@@ -191,6 +217,41 @@ export function UserManager({
                           </div>
                         )}
                       </div>
+
+                      {/* Palette Picker */}
+                      <div>
+                        <span className="mb-1 block text-[10px] font-medium text-[#b5bac1] uppercase">
+                          Estilo
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {Object.entries(BADGE_PALETTES).map(
+                            ([key, palette]) => (
+                              <button
+                                key={key}
+                                type="button"
+                                onClick={() =>
+                                  setNewBadge({ ...newBadge, iconPalette: key })
+                                }
+                                title={palette.name}
+                                className={cn(
+                                  "relative h-6 w-6 overflow-hidden rounded-full border border-[#3f4147] hover:border-[#b5bac1] transition-all",
+                                  newBadge.iconPalette === key
+                                    ? "ring-2 ring-[#00a8fc] border-transparent"
+                                    : "",
+                                )}
+                              >
+                                <div className="absolute inset-0 flex items-center justify-center bg-[#2b2d31]">
+                                  <SelectedIcon
+                                    className="h-4 w-4"
+                                    palette={palette.colors}
+                                  />
+                                </div>
+                              </button>
+                            ),
+                          )}
+                        </div>
+                      </div>
+
                       <button
                         type="button"
                         onClick={addBadge}
